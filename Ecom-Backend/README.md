@@ -1,0 +1,9 @@
+# E-Commerce Website Backend
+
+Spring Boot backend for an e-commerce application.
+
+Features:
+- Product CRUD (Create, Read, Update, Delete)
+- Search functionality
+- Search & filter APIs
+- Spring Data JPA
