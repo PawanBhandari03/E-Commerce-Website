@@ -1,0 +1,81 @@
+import type { Product } from '../types.ts'
+
+const photo = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=900&q=80`
+
+// name, brand, category, price, stock, photo id, description
+type Row = [string, string, string, number, number, string, string]
+
+const ROWS: Row[] = [
+  ['Alpha 7 Mirrorless Camera', 'Sony', 'Photography', 1499, 7, '1516035069371-29a1b244cc32', 'Full-frame mirrorless body with fast hybrid autofocus, 4K video and in-body stabilization.'],
+  ['EOS Rebel DSLR Kit', 'Canon', 'Photography', 649, 13, '1502920917128-1aa500764cbd', 'Beginner-friendly DSLR with a 24MP sensor, Wi-Fi sharing and an 18-55mm kit lens.'],
+  ['Slim Fit Black Jeans', "Levi's", 'Fashion', 79, 48, '1542272604-787c3835535d', 'Stretch-denim slim jeans with a clean dark wash that works from office to weekend.'],
+  ['Essential White Tee', 'Northline', 'Fashion', 25, 120, '1521572163474-6864f9cf17ab', 'A wardrobe staple in heavyweight organic cotton with a clean crew neckline.'],
+  ['Leather Biker Jacket', 'Northline', 'Fashion', 249, 9, '1551028719-00167b16eac5', 'Full-grain leather jacket with asymmetric zip, quilted shoulders and a satin lining.'],
+  ['Tailored Three-Piece Suit', 'Marlowe', 'Fashion', 399, 11, '1594938298603-c8148c4dae35', 'Modern-fit checked suit in a wool blend. Includes jacket, waistcoat and trousers.'],
+  ['Pastel Trench Coat', 'Marlowe', 'Fashion', 189, 17, '1539109136881-3be0616acf4b', 'Water-repellent belted trench in a soft pastel shade, lightweight for spring and autumn.'],
+  ['Old Skool Sneakers', 'Vans', 'Footwear', 65, 52, '1525966222134-fcfa99b8ae77', 'Classic low-top skate shoes with a durable suede and canvas upper and waffle outsole.'],
+  ['Air Force 1 Tan', 'Nike', 'Footwear', 110, 31, '1549298916-b41d501d3772', 'Basketball icon in tan leather with a cushioned Air sole and perforated toe box.'],
+  ['Air Force 1 Shadow Pastel', 'Nike', 'Footwear', 120, 19, '1595950653106-6c9ebd614d3a', 'Layered design in pastel tones with a chunky sole for standout everyday style.'],
+  ['Air Max 1 Orange', 'Nike', 'Footwear', 140, 23, '1600185365483-26d7a4cc7519', 'Heritage runner with a visible Air unit and breathable mesh in bold orange accents.'],
+  ['Court Classic White', 'Puma', 'Footwear', 75, 44, '1608231387042-66d1773070a5', 'Minimal white leather sneaker with a padded collar and non-marking rubber sole.'],
+  ['Air Max Grey Runner', 'Nike', 'Footwear', 150, 0, '1460353581641-37baddab0fa2', 'Lightweight mesh runner in cool grey with responsive cushioning for daily miles.'],
+  ['GG Marmont Shoulder Bag', 'Gucci', 'Accessories', 1350, 4, '1548036328-c9fa89d128fa', 'Quilted matelasse leather shoulder bag with antique gold-toned hardware.'],
+  ['Structured Top-Handle Bag', 'Marlowe', 'Accessories', 220, 8, '1584917865442-de89df76afd3', 'Red leather top-handle bag with a detachable strap and a roomy suede-lined interior.'],
+  ['Roll-Top Leather Backpack', 'Northline', 'Accessories', 129, 15, '1547949003-9792a18a2601', 'Hand-finished leather and canvas backpack with padded straps and a laptop compartment.'],
+  ['Meridian Steel Chronograph', 'Meridian', 'Wearables', 449, 6, '1523170335258-f5ed11844a49', 'Stainless-steel chronograph with a deep blue dial and 200m water resistance.'],
+  ['Minimalist Dress Watch', 'Nordic', 'Wearables', 149, 27, '1524592094714-0f0654e20314', 'Ultra-thin dress watch with a white dial and a brown leather strap.'],
+  ['Field Chronograph', 'Fossil', 'Wearables', 169, 20, '1542496658-e33a6d0d50f6', 'Rugged chronograph with a cream dial, tachymeter bezel and a leather band.'],
+  ['Rose Gold Hybrid Smartwatch', 'Fossil', 'Wearables', 195, 14, '1522312346375-d1a52e2b99b3', 'Classic analog styling with smart notifications and a week-long battery.'],
+  ['N°5 Eau de Parfum', 'Chanel', 'Beauty', 140, 12, '1541643600914-78b084683601', 'The iconic floral-aldehyde fragrance in a timeless glass bottle. 100ml.'],
+  ['Signature Face Palette', 'Bobbi Brown', 'Beauty', 48, 36, '1522335789203-aabd1fc54bc9', 'Bronzer, highlighter and blush palette in flattering everyday shades.'],
+  ['Pro Makeup Brush Set', 'Lumiere', 'Beauty', 39, 41, '1596462502278-27bfdc403348', 'Ten soft synthetic brushes for face and eyes, with a travel pouch.'],
+  ['Hydrating Face Cleanser', 'Clearly', 'Beauty', 28, 64, '1556228720-195a672e8a03', 'Gentle gel cleanser with hyaluronic acid that leaves skin soft and balanced. 150ml.'],
+  ['Daily Skincare Trio', 'Clearly', 'Beauty', 64, 29, '1571781926291-c477ebfd024b', 'Cleanser, moisturiser and SPF 30 in a simple three-step routine set.'],
+  ['Eyeshadow Artist Palette', 'Lumiere', 'Beauty', 42, 22, '1512496015851-a90fb38ba796', 'Thirty-five highly pigmented matte and shimmer shades with a built-in mirror.'],
+  ['Aurel Pro ANC Headphones', 'Aurel', 'Audio', 199, 25, '1546435770-a3e426bf472b', 'Wireless over-ear headphones with hybrid noise cancellation and 40-hour battery life.'],
+  ['Sony WH-1000XM4', 'Sony', 'Audio', 279, 18, '1618366712010-f4ae9c647dcb', 'Premium noise-canceling headphones with speak-to-chat and multipoint connection.'],
+  ['Pixel Buds Pro', 'Google', 'Audio', 199, 33, '1590658268037-6bf12165a8df', 'True wireless earbuds with active noise cancellation and a pocketable charging case.'],
+  ['Neon Wireless Earbuds', 'Nordic', 'Audio', 79, 55, '1606220588913-b3aacb4d2f46', 'Compact Bluetooth 5.3 earbuds with punchy bass and 24 hours total playtime.'],
+  ['Nest Mini Smart Speaker', 'Google', 'Audio', 49, 70, '1558089687-f282ffcbc126', 'Voice-controlled smart speaker with rich sound for music, news and home control.'],
+  ['Studio Bookshelf Speakers', 'Aurel', 'Audio', 249, 10, '1545454675-3531b543be5d', 'Pair of two-way bookshelf speakers with wooden cabinets and crisp, detailed sound.'],
+  ['iMac 24" Retina', 'Apple', 'Desktop', 1299, 9, '1527443060795-0402a18106c2', 'All-in-one desktop with a 4.5K Retina display, M3 chip and a 1080p camera.'],
+  ['Zephyr Pro 16 Creator Laptop', 'Zephyr', 'Laptop', 1799, 8, '1531297484001-80022131f5a1', 'A 16-inch creator laptop with a mini-LED display, 32GB RAM and a dedicated GPU.'],
+  ['Nova Gaming PC', 'Nova', 'Desktop', 1999, 5, '1587302912306-cf1ed9c33146', 'Liquid-cooled RGB tower with a high-end GPU, 32GB DDR5 and a 2TB NVMe drive.'],
+  ['iPad Pro 11"', 'Apple', 'Tablet', 799, 16, '1544244015-0df4b3ffc6b0', 'Thin and powerful tablet with a Liquid Retina display, M2 chip and Apple Pencil support.'],
+  ['Xiaomi 13', 'Xiaomi', 'Mobile', 599, 21, '1598327105666-5b89351aff97', 'Flagship Android phone with a 120Hz AMOLED display and a Leica-tuned camera system.'],
+  ['iPhone 13 Pro', 'Apple', 'Mobile', 899, 12, '1565849904461-04a58ad377e0', 'ProMotion display, A15 Bionic and a triple-camera system with macro photography.'],
+  ['iPhone 12', 'Apple', 'Mobile', 599, 30, '1592899677977-9c10ca588bbd', 'Super Retina XDR display, 5G speed and Ceramic Shield front cover.'],
+  ['Nova Edge 5G', 'Nova', 'Mobile', 699, 26, '1601784551446-20c9e07cdbdb', 'Slim 5G smartphone with an edge-to-edge OLED display and a 5000mAh battery.'],
+  ['iPhone 13', 'Apple', 'Mobile', 699, 0, '1580910051074-3eb694886505', 'Dual-camera system, Cinematic mode and a bright Super Retina XDR display.'],
+  ['PlayStation 5 Console', 'Sony', 'Gaming', 499, 6, '1606144042614-b2417e99c4e3', 'Ultra-high-speed SSD, ray tracing and the DualSense controller with haptic feedback.'],
+  ['Xbox Wireless Controller', 'Microsoft', 'Gaming', 59, 58, '1612287230202-1ff1d85d1bdf', 'Textured grip, hybrid D-pad and Bluetooth for console, PC and mobile play.'],
+  ['Ceramic Coffee Mug', 'Hearth', 'Home', 18, 150, '1514228742587-6b1558fcca3d', 'Hand-glazed stoneware mug with a comfortable handle, microwave and dishwasher safe.'],
+  ['Oak Bar Stool', 'Hearth', 'Home', 59, 24, '1503602642458-232111445657', 'Solid oak stool with a whitewashed finish, sturdy footrest and a minimalist silhouette.'],
+  ['Emerald Velvet Sofa', 'Hearth', 'Home', 799, 3, '1555041469-a586c61ea9bc', 'Three-seater sofa in plush velvet with tapered wooden legs and deep seat cushions.'],
+  ['Task Desk Lamp', 'Hearth', 'Home', 39, 47, '1507473885765-e6ed057f782c', 'Adjustable matte-grey desk lamp with a warm LED bulb for focused reading and work.'],
+  ['Mustard Accent Armchair', 'Hearth', 'Home', 349, 7, '1586023492125-27b2c045efd7', 'Mid-century armchair in mustard fabric with solid beech legs.'],
+  ['Potted Succulent', 'Hearth', 'Home', 22, 80, '1485955900006-10f4d324d411', 'Low-maintenance succulent in a mint ceramic pot, ideal for desks and shelves.'],
+  ['Super Mario Figure Set', 'Nintendo', 'Toys', 59, 34, '1566576912321-d58ddd7a6088', 'Collectible figure set with Mario, Luigi and Princess Peach, hand-painted details.'],
+  ['Wooden Train Set', 'Hape', 'Toys', 49, 28, '1596461404969-9ae70f2830c1', 'Classic wooden railway set with tracks, trees and a colourful steam train.'],
+  ['Classic Brick Box', 'Lego', 'Toys', 39, 90, '1587654780291-39c9404d746b', 'A big box of colourful building bricks to spark hours of creative play.'],
+  ['Exercise Mat Pro', 'Active', 'Sports', 29, 65, '1571019613454-1cb2f99b2d8b', 'Extra-thick, non-slip mat for floor workouts, stretching and core training.'],
+  ['Olympic Barbell Set', 'Active', 'Sports', 249, 10, '1517836357463-d25dfeac3438', 'Chrome barbell with weight plates and collars for strength training at home.'],
+  ['Adjustable Dumbbell Set', 'Active', 'Sports', 129, 20, '1534438327276-14e5300c3a48', 'Space-saving dumbbell pair that adjusts from 5 to 50 lb in seconds.'],
+  ['Premium Yoga Mat', 'Active', 'Sports', 45, 38, '1544367567-0f2fcb009e0b', 'Cushioned eco-friendly yoga mat with alignment lines and a carry strap.'],
+]
+
+/** Frontend-only sample catalog. Ids are negative so they never clash with backend products. */
+export const DEMO_PRODUCTS: Product[] = ROWS.map(([name, brand, category, price, stock, img, description], i) => ({
+  id: -(i + 1),
+  name,
+  brand,
+  category,
+  price,
+  description,
+  stockQuantity: stock,
+  productAvailable: stock > 0,
+  releaseDate: `202${(i % 4) + 0}-0${(i % 9) + 1}-1${i % 9}`,
+  imageUrl: photo(img),
+}))
+
+export const isDemo = (id: number) => id < 0

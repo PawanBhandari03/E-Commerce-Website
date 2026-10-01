@@ -1,6 +1,7 @@
 package com.pawan.ecom_project.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,8 +31,10 @@ public class Product {
     private Boolean productAvailable;
     private Integer stockQuantity;
 
+    private String imageUrl;
     private String imageName;
     private String imageType;
     @Lob
-    private byte[] imageDate;
+    @JsonIgnore
+    private byte[] imageData;
 }

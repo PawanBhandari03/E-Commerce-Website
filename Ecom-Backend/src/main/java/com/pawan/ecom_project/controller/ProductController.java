@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = {"http://localhost:5173", "http://127.0.0.1:5173"})
 @RestController
 @RequestMapping("/api")
 public class ProductController {
@@ -30,59 +30,45 @@ public class ProductController {
         return new ResponseEntity<>(service.getProductsById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/product")
-    public ResponseEntity<?> addProduct(@RequestPart Product product,
-                                        @RequestPart MultipartFile imageFile) {
-        try {
-            Product product1 = service.addProduct(product, imageFile);
-            return new ResponseEntity<>(product1, HttpStatus.CREATED);
-        }
-        catch(Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @PostMapping(value = "/product", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Product> addProduct(@RequestPart Product product,
+                                              @RequestPart(required = false) MultipartFile imageFile) throws IOException {
+        return new ResponseEntity<>(service.addProduct(product, imageFile), HttpStatus.CREATED);
     }
 
-        @GetMapping("/product/{productId}/image")
-        public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId){
-            Product product = service.getProductsById(productId);
-            byte[] imageFile = product.getImageDate();
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.valueOf(product.getImageType()))
-                    .body(imageFile);
+    @GetMapping("/product/{productId}/image")
+    public ResponseEntity<byte[]> getImageByProductId(@PathVariable int productId) {
+        Product product = service.getProductsById(productId);
+        if (product.getImageData() == null || product.getImageType() == null) {
+            return ResponseEntity.notFound().build();
         }
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(product.getImageType()))
+                .body(product.getImageData());
+    }
 
-        @PutMapping("/product/{id}")
-        public ResponseEntity<String>updateProduct(@PathVariable int id,@RequestPart Product product,
-                                                   @RequestPart MultipartFile imageFile){
-            Product product1 = null;
-            try {
-                product1 = service.updateProduct(id,product,imageFile);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            if(product1 != null)
-            return new ResponseEntity<>("Updated" , HttpStatus.OK);
-        else
-            return new ResponseEntity<>("Failed to update" , HttpStatus.BAD_REQUEST);
-        }
+    @PutMapping(value = "/product/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateProduct(@PathVariable int id,
+                                                @RequestPart Product product,
+                                                @RequestPart(required = false) MultipartFile imageFile) throws IOException {
+        service.updateProduct(id, product, imageFile);
+        return new ResponseEntity<>("Updated", HttpStatus.OK);
+    }
 
-        @DeleteMapping("/product/{id}")
-        public ResponseEntity<String> deleteProduct(@PathVariable int id){
-        Product product = service.getProductsById(id);
-        if(product != null){
-            service.deleteProduct(id);
-            return new ResponseEntity<>("Deleted",HttpStatus.OK);
-        }
-        else
-            return new ResponseEntity<>("Product Not Found", HttpStatus.NOT_FOUND);
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable int id) {
+        service.deleteProduct(id);
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 
     @GetMapping("/products/search")
-    public ResponseEntity<List<Product>> searchProducts(String keyword){
-        System.out.println("searching with" + keyword);
-        List<Product> products =service.searchProducts(keyword);
-        return new ResponseEntity<>(products, HttpStatus.OK);
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword) {
+        return new ResponseEntity<>(service.searchProducts(keyword), HttpStatus.OK);
     }
-    
+
+    @PostMapping("/checkout")
+    public ResponseEntity<String> checkout(@RequestBody List<ProductService.CheckoutItem> items) {
+        service.checkout(items);
+        return new ResponseEntity<>("Order placed", HttpStatus.OK);
+    }
 }
